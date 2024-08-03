@@ -20,5 +20,6 @@ freshwater lake.</string>
     <string name="correctString">Correct!</string>
     <string name="incorrectString">Incorrect :(</string>
     <string name="nextButton">Next</string>
+    <string name="prevButton">Prev</string>
 
 </resources>
