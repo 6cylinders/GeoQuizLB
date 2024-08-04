@@ -1,9 +1,11 @@
 package com.example.geoquizlb
 
+import android.util.Log
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -13,20 +15,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val questionBank = listOf(
-        Question(R.string.questionAustralia, true),
-        Question(R.string.questionOceans, true),
-        Question(R.string.questionMideast, false),
-        Question(R.string.questionAfrica, false),
-        Question(R.string.questionAmericas, true),
-        Question(R.string.questionAsia, true))
-    private var currentIndex = 0
+    private val quizViewModel: QuizViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d(quizViewModel.getTag(), "Got a QuizViewModel: $quizViewModel")
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -41,28 +37,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.nextButton.setOnClickListener {
-            currentIndex = (currentIndex + 1) % questionBank.size
+            quizViewModel.moveToNext()
             updateQuestion()
         }
 
         binding.prevButton.setOnClickListener {
-            if (currentIndex > 0) {
-                currentIndex = (currentIndex - 1) % questionBank.size
-                updateQuestion()
-            }
+            quizViewModel.moveToPrev()
+            updateQuestion()
         }
-
         updateQuestion()
-
     }
 
-        private fun updateQuestion() {
-            val questionTextResId = questionBank[currentIndex].textResId
-            binding.questionTextView.setText(questionTextResId)
-        }
+
+    private fun updateQuestion() {
+        val questionTextResId = quizViewModel.currentQuestionText
+        binding.questionTextView.setText(questionTextResId)
+    }
 
     private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank[currentIndex].answer
+        val correctAnswer = quizViewModel.currentQuestionAnswer
         val messageResId = if (userAnswer == correctAnswer) {
             R.string.correctString
         } else {
@@ -72,5 +65,6 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    }
+}
+
 
