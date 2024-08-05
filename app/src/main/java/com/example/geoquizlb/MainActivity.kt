@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.geoquizlb.databinding.ActivityMainBinding
+import android.content.Intent
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +36,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.falseButton.setOnClickListener { view: View ->
             checkAnswer(false)
+        }
+
+        binding.cheatButton.setOnClickListener {
+            val answerIsTrue = quizViewModel.currentQuestionAnswer
+            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            startActivity(intent)
         }
 
         binding.nextButton.setOnClickListener {
