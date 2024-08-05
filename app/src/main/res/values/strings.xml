@@ -11,15 +11,17 @@ in the Americas.</string>
     <string name="questionAsia">Lake Baikal is the world\'s oldest and deepest
 freshwater lake.</string>
 
-
-
-
-
     <string name="trueButton">True</string>
     <string name="falseButton">False</string>
     <string name="correctString">Correct!</string>
     <string name="incorrectString">Incorrect :(</string>
     <string name="nextButton">Next</string>
     <string name="prevButton">Prev</string>
+
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
+
 
 </resources>

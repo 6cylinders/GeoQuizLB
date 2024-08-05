@@ -32,6 +32,7 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         if (currentIndex > 0) {
             currentIndex = (currentIndex - 1) % questionBank.size
         }
+        else{currentIndex = (questionBank.size)-1}
     }
 
     fun getTag(): String {
