@@ -1,5 +1,6 @@
 package com.example.geoquizlb
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.example.geoquizlb.databinding.ActivityCheatBinding
 import android.content.Intent
 import android.content.Context
 
+const val EXTRA_ANSWER_SHOWN = "com.example.geoquizlb.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE =
     "com.example.geoquizlb.MainActivity.answer_is_true"
 
@@ -31,13 +33,29 @@ class CheatActivity : AppCompatActivity() {
                 else -> R.string.falseButton
             }
             binding.answerTextView.setText(answerText)
+            setAnswerShownResult(true)
         }
+
+        binding.cheatBackButton.setOnClickListener{
+            this.finish()
+        }
+
+
+
+
 //replace r.main with another id within activity cheat xml
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.cheatMain)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun setAnswerShownResult(isAnswerShown: Boolean) {
+        val data = Intent().apply {
+            putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown)
+        }
+        setResult(Activity.RESULT_OK, data)
     }
 
     companion object {

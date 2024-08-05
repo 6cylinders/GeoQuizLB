@@ -1,5 +1,6 @@
 package com.example.geoquizlb
 
+import android.app.Activity
 import android.util.Log
 import android.os.Bundle
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.geoquizlb.databinding.ActivityMainBinding
 import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +20,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val quizViewModel: QuizViewModel by viewModels()
+
+    private val cheatLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result -> if (result.resultCode == Activity.RESULT_OK) {
+        quizViewModel.isCheater =
+            result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+    }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         binding.cheatButton.setOnClickListener {
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            startActivity(intent)
+            cheatLauncher.launch(intent)
         }
 
         binding.nextButton.setOnClickListener {
@@ -64,10 +74,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = quizViewModel.currentQuestionAnswer
-        val messageResId = if (userAnswer == correctAnswer) {
-            R.string.correctString
-        } else {
-            R.string.incorrectString
+        val messageResId = when {
+            quizViewModel.isCheater -> R.string.judgment_toast
+            userAnswer == correctAnswer -> R.string.correctString
+            else -> R.string.incorrectString
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
