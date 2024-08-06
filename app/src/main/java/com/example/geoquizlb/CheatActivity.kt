@@ -14,6 +14,7 @@ const val EXTRA_ANSWER_SHOWN = "com.example.geoquizlb.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE =
     "com.example.geoquizlb.MainActivity.answer_is_true"
 
+
 class CheatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCheatBinding

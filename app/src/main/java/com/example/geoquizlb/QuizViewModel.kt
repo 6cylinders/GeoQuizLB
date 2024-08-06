@@ -28,20 +28,30 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     val currentQuestionText: Int
         get() = questionBank[currentIndex].textResId
 
+    fun resetCheater(){
+        isCheater = false
+    }
+
     fun moveToNext() {
         currentIndex = (currentIndex + 1) % questionBank.size
+        resetCheater()
     }
+
 
     fun moveToPrev() {
         if (currentIndex > 0) {
             currentIndex = (currentIndex - 1) % questionBank.size
         }
         else{currentIndex = (questionBank.size)-1}
+
+        resetCheater()
     }
 
     fun getTag(): String {
         return TAG
     }
+
+
 
 }
 
