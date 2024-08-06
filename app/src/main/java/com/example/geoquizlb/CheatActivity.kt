@@ -9,6 +9,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.geoquizlb.databinding.ActivityCheatBinding
 import android.content.Intent
 import android.content.Context
+import androidx.activity.viewModels
+
 
 const val EXTRA_ANSWER_SHOWN = "com.example.geoquizlb.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE =
@@ -19,19 +21,26 @@ class CheatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCheatBinding
 
-    private var answerIsTrue = false
+    //private var answerIsTrue = false
+
+    private val cheatViewModel: CheatViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityCheatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
+
+        if (savedInstanceState == null) {
+            cheatViewModel.answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
+        }
 
         binding.showAnswerButton.setOnClickListener {
-            val answerText = when {
-                answerIsTrue -> R.string.trueButton
-                else -> R.string.falseButton
+            val answerText = if (cheatViewModel.answerIsTrue) {
+                R.string.trueButton
+            } else {
+                R.string.falseButton
             }
             binding.answerTextView.setText(answerText)
             setAnswerShownResult(true)
@@ -40,9 +49,6 @@ class CheatActivity : AppCompatActivity() {
         binding.cheatBackButton.setOnClickListener{
             this.finish()
         }
-
-
-
 
 //replace r.main with another id within activity cheat xml
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.cheatMain)) { v, insets ->
